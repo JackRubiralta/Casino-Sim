@@ -3,7 +3,7 @@ import random
 import os
 
 # Initial money
-INITIAL_MONEY = 302123.32
+INITIAL_MONEY = 802123.32
 PLAYER_EDGE = 0.49
 total_money = INITIAL_MONEY
 bets_placed = 0
@@ -29,8 +29,10 @@ async def coin_flip_bet():
 
             
 
-            await asyncio.sleep(0.01)  # Allow other tasks to run
-        
+            await asyncio.sleep(0.005)  # Allow other tasks to run
+        else:
+            print("Bankrupt!")
+            exit()
 
 async def print_total_money():
     global INITIAL_MONEY
@@ -50,9 +52,12 @@ async def print_total_money():
         
 
 async def main():
-    bet_tasks = [asyncio.create_task(coin_flip_bet()) for _ in range(1)]
-    print_task = asyncio.create_task(print_total_money())
-    await asyncio.gather(*bet_tasks, print_task)
-
+    try:
+        bet_tasks = [asyncio.create_task(coin_flip_bet()) for _ in range(1)]
+        print_task = asyncio.create_task(print_total_money())
+        await asyncio.gather(*bet_tasks, print_task)
+    except:
+        pass
+    
 if __name__ == '__main__':
     asyncio.run(main())
